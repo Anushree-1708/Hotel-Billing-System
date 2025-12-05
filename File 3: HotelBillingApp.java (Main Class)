@@ -1,0 +1,48 @@
+import java.util.*;
+
+public class HotelBillingApp {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        HotelDAO dao = new HotelDAO();
+
+        System.out.println("=== HOTEL BILLING SYSTEM ===");
+        System.out.print("Enter Customer Name: ");
+        String customer = sc.nextLine();
+
+        System.out.println("\n--- Menu ---");
+        ArrayList<String> menu = dao.getMenu();
+        for(String m : menu) System.out.println(m);
+
+        System.out.print("\nEnter Item Name: ");
+        String item = sc.nextLine();
+
+        System.out.print("Enter Quantity: ");
+        int qty = sc.nextInt();
+
+        double price = 0;
+        for(String m : menu) {
+            if(m.startsWith(item)) {
+                price = Double.parseDouble(m.split("₹")[1]);
+                break;
+            }
+        }
+
+        double total = price * qty;
+        double tax = total * 0.05; // 5% tax
+        double finalAmount = total + tax;
+
+        if(dao.placeOrder(customer, item, qty, finalAmount))
+            System.out.println("\nOrder Placed Successfully!");
+
+        System.out.println("\n=== BILL ===");
+        System.out.println("Customer: " + customer);
+        System.out.println("Item: " + item);
+        System.out.println("Quantity: " + qty);
+        System.out.println("Total: ₹" + total);
+        System.out.println("Tax (5%): ₹" + tax);
+        System.out.println("Amount Payable: ₹" + finalAmount);
+
+        System.out.println("\nThank You! Visit Again.");
+    }
+}
